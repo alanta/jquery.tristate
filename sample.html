@@ -1,0 +1,68 @@
+<html>
+<head>
+	<title>jQuery tri-state checkbox demo</title>
+	<link rel="stylesheet" type="text/css" href="css/tristate.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="js/jquery.tristate.js"></script>
+	<!-- demo page styles -->
+	<style type="text/css">
+		ul, ul li { margin: 0; padding:0; list-style: none none outside; }
+	</style>
+</head>
+<body>
+	<h1>jQuery tri-state checkboxes demo</h1>
+	<h2>Stand alone usage</h2>
+	<p><label><a class="tristate on" href="#"><input type="hidden" name='defaultOn'/></a> Initially on; clicking will uncheck</label></p>
+	<p><label><a class="tristate intermediate" href="#" id="resetme"><input type="hidden" name='defaultIntermediate'/></a> Initially intermediate; clicking will check.</label> <a href="#" id="reset">[reset]</p>
+	<p><label><a class="tristate off" href="#"><input type="hidden" name='defaultOff'/></a> Initially off; clicking will check</label></p>
+	<h2>Use in master-detail set</h2>
+	<p>Try selecting any combination of checkboxes. Using events the tristate checkbox will reflect the state of it's children.</p>
+	<ul class="master">
+		<li>
+			<p><label><a class="tristate" href="#"><input type="hidden" name='tristate1'/></a> Master item 1</label></p>
+			<ul class='details'>
+				<p><label><input type="checkbox" name="cb11" /> Item 1</label></p>
+				<p><label><input type="checkbox" name="cb12" /> Item 2</label></p>
+				<p><label><input type="checkbox" name="cb13" /> Item 3</label></p>
+			</ul>
+		</li>
+		<li>
+			<p><label><a class="tristate intermediate" href="#"><input type="hidden" name='tristate1'/></a> Master item 2</label></p>
+			<ul class='details'>
+				<p><label><input type="checkbox" name="cb21" checked="checked" /> Item 1</label></p>
+				<p><label><input type="checkbox" name="cb22" /> Item 2</label></p>
+			</ul>
+		</li>
+	</ul>
+
+<script type="text/javascript">
+	$(function(){
+		$('.tristate').tristate(); // enable all tristate checboxes
+		
+		// reset link
+		$('#reset').click(function(){ $('#resetme').tristate('intermediate'); return false; })
+		
+		// master-detail set demo
+	
+		$('ul.master .tristate input').change(function(e){
+			// When master item is clicked, update all child items
+			var children = $('.details [type=checkbox]', $(this).closest('li'));
+			var checked = $(this).val() == 'true';
+			children.attr('checked', checked);
+		});
+		
+		$('.details input[type=checkbox]').change(function(e){
+			// when a child item is clicked, update the parent
+			var details =  $(this).closest('.details'); // the container for all child items
+			var all = $('[type=checkbox]',details); // all child items
+			var checked = $(':checked',details).length; // see if any are checked
+			var tristate = $('.tristate', $(details).parent());
+			// update the tristate checkbox
+			$(tristate).tristate( all.length == checked ? 'on' : ( checked > 0 ? 'intermediate' : 'off' )  );
+		});
+		
+		
+	});
+</script>
+</body>
+</html>

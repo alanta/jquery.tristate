@@ -1,0 +1,8 @@
+.tristate { display: inline-block; width:13px; height:13px; background: transparent url('../img/3-state-checkbox.png') scroll no-repeat top left;}
+.tristate.off {background-position: 0 0;}
+.tristate.on {background-position:  0 -13px;}
+.tristate.intermediate {background-position: 0 -26px;}
+.tristate.off:hover {background-position: -13px 0;}
+.tristate.on:hover {background-position:  -13px -13px;}
+.tristate.intermediate:hover {background-position: -13px -26px;}
+a.tristate { cursor: default; }
