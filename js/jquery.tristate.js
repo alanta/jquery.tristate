@@ -34,14 +34,18 @@
 					methods._apply.call(this,'on');
 					break;
 			}
+			$('input[type=hidden]', $(this)).trigger('change');
 		},
 		getState : function(){
 			var obj = $(this);
 			return obj.hasClass('on') ? 'on' : 
 			( obj.hasClass('intermediate') ? 'intermediate' : 'off' );
 		},
-		setState : function(value){
-			methods._apply.call(this,value);
+		setState: function(value,suppressChangeEvent) {
+			suppressChangeEvent = typeof suppressChangeEvent !== 'undefined' && suppressChangeEvent;
+			if(methods._apply.call(this, value) && !suppressChangeEvent ) {
+				$('input[type=hidden]', $(this)).trigger('change');
+			}
 			return $(this);
 		},
 		_apply : function(newState){
@@ -62,8 +66,10 @@
 			}
 			var input = $('input[type=hidden]', obj);
 			if( input.val() !== newValue ) {
-				input.val(newValue).trigger('change');
+				input.val(newValue);
+				return true;
 			}
+			return false;
 		}
 	};
 
@@ -75,8 +81,7 @@
 			return methods.setState.call(this,method);
 		} else if ( typeof method === 'object' || ! method ) {
 		  return methods.init.apply( this, arguments );
-		} else {
-		  $.error( 'Method ' +  method + ' does not exist on jQuery.tristate' );
-		} 
+		}
+		$.error( 'Method ' +  method + ' does not exist on jQuery.tristate' );
 	};
 })(jQuery)

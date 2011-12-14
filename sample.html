@@ -58,7 +58,7 @@
 			var checked = $(':checked',details).length; // see if any are checked
 			var tristate = $('.tristate', $(details).parent());
 			// update the tristate checkbox
-			$(tristate).tristate( all.length == checked ? 'on' : ( checked > 0 ? 'intermediate' : 'off' )  );
+			$(tristate).tristate( 'setState', all.length == checked ? 'on' : ( checked > 0 ? 'intermediate' : 'off' ), true /* suppress change event */ ); 
 		});
 		
 		
