@@ -34,7 +34,6 @@
 					methods._apply.call(this,'on');
 					break;
 			}
-			$('input[type=hidden]', this).trigger('change');
 		},
 		getState : function(){
 			var obj = $(this);
@@ -47,21 +46,23 @@
 		},
 		_apply : function(newState){
 			var obj = $(this);
-			var input = $('input[type=hidden]', obj);
+			var newValue = 'true';
 			switch(newState){
 				case 'on':
 				case true:
 					obj.removeClass('off intermediate').addClass('on');
-					input.val('true');
 					break;
 				case 'intermediate':
 					obj.removeClass('off on').addClass('intermediate');
-					input.val('true');
 					break;
 				default:
 					obj.removeClass('on intermediate').addClass('off');
-					input.val('false');
+					newValue = 'false';
 					break;
+			}
+			var input = $('input[type=hidden]', obj);
+			if( input.val() !== newValue ) {
+				input.val(newValue).trigger('change');
 			}
 		}
 	};
